@@ -1,7 +1,8 @@
 Cet outil permet de rechercher des rapports "magique" entre les dimensions d'un objet.
 Il a pour but de démystifier les affirmations du type :
 - "Le ½ périmètre de la pyramide de Khéops au sol divisé par la hauteur au sol est égal à PI"
-- "La hauteur de la pyramide de Khéops divisé par racine carré de PHIE égale la 1/2 base de la pyramide"
+- "La hauteur de la pyramide de Khéops divisé par racine carré de PHI égale la 1/2 base de la pyramide"
+
 En effet, vous pourrez trouver des rapports "magiques" dans n'importe quel objet courant, une twingo, un stylo, une chaise, etc...
 
 Il faut d'abord renseigner quelques dimensions avec le formulaire nom => valeur
