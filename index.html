@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ZozoCalc</title>
+    <link rel="icon" size="32x32" href="./img/favicon32.png" type="image/png">
+    <script type="text/javascript" src="./js/jquery.min.js"></script><!-- jquery 1.11.3 -->
+    <script type="text/javascript" src="./js/umd/popper.min.js"></script><!-- popper 1.14.7 -->
+    <script type="text/javascript" src="./js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./css/bootstrap.min.css"><!-- bootstrap 4.3.1 -->
+    <script type="text/javascript" src="./js/ZozoCalc.js"></script>
+    <script>
+        let id = 0;
+        function ajouterPropriete() {
+            id++;
+            let divCenter = document.createElement('div');
+            divCenter.setAttribute('class', 'row justify-content-center');
+            let nomDiv = document.createElement('div');
+            nomDiv.setAttribute('class', 'col-md-4 my-1');
+            let nomIG = document.createElement('div');
+            nomIG.setAttribute('class', 'input-group');
+            let nomIGPrep = document.createElement('div');
+            nomIGPrep.setAttribute('class', 'input-group-prepend');
+            let nomIGText = document.createElement('div');
+            nomIGText.setAttribute('class', 'input-group-text');
+            nomIGText.innerHTML = 'Nom';
+            let nomInput = document.createElement('input');
+            nomInput.setAttribute('class', 'form-control');
+            nomInput.setAttribute('type', 'text');
+            nomInput.setAttribute('id', 'nom_' + id);
+            nomInput.setAttribute('maxlength', '50');
+            divCenter.appendChild(nomDiv);
+            nomDiv.appendChild(nomIG);
+            nomIG.appendChild(nomIGPrep);
+            nomIG.appendChild(nomInput);
+            nomIGPrep.appendChild(nomIGText);
+            let valDiv = document.createElement('div');
+            valDiv.setAttribute('class', 'col-md-3 my-1');
+            let valIG = document.createElement('div');
+            valIG.setAttribute('class', 'input-group');
+            let valIGPrep = document.createElement('div');
+            valIGPrep.setAttribute('class', 'input-group-prepend');
+            let valIGText = document.createElement('div');
+            valIGText.setAttribute('class', 'input-group-text');
+            valIGText.innerHTML = 'Valeur';
+            let valInput = document.createElement('input');
+            valInput.setAttribute('class', 'form-control');
+            valInput.setAttribute('type', 'text');
+            valInput.setAttribute('id', 'val_' + id);
+            valInput.setAttribute('maxlength', '10');
+            divCenter.appendChild(valDiv);
+            valDiv.appendChild(valIG);
+            valIG.appendChild(valIGPrep);
+            valIG.appendChild(valInput);
+            valIGPrep.appendChild(valIGText);
+            document.getElementById('tab').appendChild(divCenter);
+        }
+        function calculer() {
+            names = [];
+            values = [];
+            specials = [];
+            let i = 0;
+            let findNext = true;
+            let noData = true;
+            let error = false;
+            let messageError = "Le calcul ne peut pas commencer :\n";
+            while (findNext) {
+                let nom = document.getElementById("nom_" + i);
+                let val = document.getElementById("val_" + i);
+                if (nom.value != "") noData = false;
+                val.value = val.value.replace(",", ".");
+                if (nom.value != "") {
+                    if (val.value == null || isNaN(val.value) || val.value <= 0) {
+                        error = true;
+                        if (val.value == null || val.value.trim() == "") messageError += `La valeur de la propriété ${nom.value} n'est pas renseignée !\n`;
+                        else messageError += `La valeur de la propriété ${nom.value} n'est pas un nombre positif !\n`;
+                    }
+                    else {
+                        names.push(nom.value);
+                        values.push(val.value);
+                    }
+                }
+                i++;
+                findNext = document.getElementById("nom_" + i) != null;
+            }
+            if (noData) {
+                alert("Il n'y a aucune propriété renseignée !");
+                return false;
+            }
+            if (error) {
+                alert(messageError);
+                return false;
+            }
+            combi();
+            combi();
+            test();
+        }
+        function afficheAide(type) {
+            if (document.getElementById(type).style.visibility == "visible") {
+                document.getElementById(type).innerHTML = "";
+                document.getElementById(type).style.marginTop = "-30px";
+                document.getElementById(type).style.visibility = "hidden";
+            }
+            else {
+                switch (type) {
+                    case "helpRemarquable":
+                        texte = "Le programme va tester des combinaisons de calculs en utilisant les propriétés saisies. Il va lister les combinaisons qui mettent en rapport l'un des nombres remarquables suivants&nbsp;:<br> π : le rapport constant de la circonférence d’un cercle à son diamètre ≈ 3.141<br> φ : le nombre d'or ou divine proportion = (1+√5)/2 ≈ 1.618<br>e : le nombre d'Euler ou constante de la croissance exponentielle ≈ 2.718<br>c : la vitesse de la lumière dans le vide ≈ 2.997 x 10exp8 m/s";
+                        break;
+                    default:
+                }
+                document.getElementById(type).style.marginTop = "20px";
+                document.getElementById(type).innerHTML = texte;
+                document.getElementById(type).style.visibility = "visible";
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: url(./img/hieroglyphics.png) repeat top left;
+        }
+        .btn-circle {
+            width: 30px;
+            height: 30px;
+            padding: 6px 0px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.42857;
+        }
+        #sortie {
+            background-color: white;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="./img/ZozoCalc.png"/ style="width:100%;height:auto;">
+        <div class="row justify-content-center">
+            <a class="btn btn-dark" href="http://paypal.me/BlaiseFacy" role="button">Faire un don</a>
+        </div>
+        <br><br>
+        <h3 class="mb-3">Liste des propriétés</h3>
+        <div id="tab">
+            <div class="row justify-content-center">
+                <div class="col-md-4 my-1">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Nom</div>
+                        </div>
+                        <input id="nom_0" type="text" class="form-control" maxlength="50" value="">
+                    </div>
+                </div>
+                <div class="col-md-3 my-1">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Valeur</div>
+                        </div>
+                        <input id="val_0" type="text" class="form-control" maxlength="10" value="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="custom-file text-right">
+            <button type="submit" class="btn btn-primary" id="" onClick="ajouterPropriete();">Ajouter une
+                propriété</button>
+        </div>
+        <br><br>
+        <div class="custom-file text-center">
+            <button type="submit" class="btn btn-primary" id="" onClick="calculer();">Lancer la recherche</button>
+            <button type="button" class="btn btn-info btn-circle" onClick="afficheAide('helpRemarquable');">
+                <img src="./img/info.png" style="width:18px;height:auto;">
+            </button>
+        </div>
+        <div class="alert alert-info" role="info" id="helpRemarquable" style="visibility:hidden;margin-top:-30px"></div>
+        <br>
+        <div id="sortie" style="visibility:hidden"></div>
+        <br>
+        <h5>
+            <div class="custom-file text-center">
+                © 2019 <a href="mailto:blaisefacy@gmail.com">Blaise Facy</a>
+            </div>
+        </h5>
+    </div>
+</body>
+
+</html>
